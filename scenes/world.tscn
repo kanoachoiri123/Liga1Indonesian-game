@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://dtkgwk2n5qt2j"]
+[gd_scene load_steps=8 format=3 uid="uid://dtkgwk2n5qt2j"]
 
 [ext_resource type="Texture2D" uid="uid://0s7kth3tihkf" path="res://assets/art/backgrounds/pitch-background.png" id="1_4wyf3"]
 [ext_resource type="Texture2D" uid="uid://drehg5tpqhqnf" path="res://assets/art/backgrounds/pitch-pattern.png" id="2_k0juu"]
 [ext_resource type="Texture2D" uid="uid://cpf7paehym3y3" path="res://assets/art/backgrounds/pitch-lines.png" id="3_71j4m"]
+[ext_resource type="PackedScene" uid="uid://7swnrvbdn6yn" path="res://scenes/goal/goal.tscn" id="4_i7141"]
 [ext_resource type="PackedScene" uid="uid://c1ixbhxgm4de4" path="res://scenes/Characters/player.tscn" id="4_k0juu"]
 [ext_resource type="PackedScene" uid="uid://bap12k0s13vwy" path="res://scenes/football/football.tscn" id="5_71j4m"]
+[ext_resource type="Script" uid="uid://b42vblqygijkn" path="res://scenes/game_camera.gd" id="6_qfnet"]
 
 [node name="World" type="Node2D"]
 
@@ -30,19 +32,38 @@ centered = false
 [node name="ActorsContainer" type="Node2D" parent="."]
 y_sort_enabled = true
 
+[node name="PitchObjects" type="Node2D" parent="ActorsContainer"]
+y_sort_enabled = true
+
+[node name="GoalHome" parent="ActorsContainer/PitchObjects" instance=ExtResource("4_i7141")]
+position = Vector2(32, 220)
+
+[node name="GoalAway" parent="ActorsContainer/PitchObjects" instance=ExtResource("4_i7141")]
+position = Vector2(818, 220)
+scale = Vector2(-1, 1)
+
 [node name="Player" parent="ActorsContainer" node_paths=PackedStringArray("ball") instance=ExtResource("4_k0juu")]
 position = Vector2(139, 89)
-control_scheme = 0
 ball = NodePath("../Ball")
 
 [node name="Player2" parent="ActorsContainer" node_paths=PackedStringArray("ball") instance=ExtResource("4_k0juu")]
 position = Vector2(123, 162)
+control_scheme = 0
 ball = NodePath("../Ball")
 
 [node name="Player3" parent="ActorsContainer" node_paths=PackedStringArray("ball") instance=ExtResource("4_k0juu")]
 position = Vector2(209, 135)
-control_scheme = 2
+control_scheme = 0
 ball = NodePath("../Ball")
 
 [node name="Ball" parent="ActorsContainer" instance=ExtResource("5_71j4m")]
 position = Vector2(159, 132)
+
+[node name="Camera" type="Camera2D" parent="." node_paths=PackedStringArray("ball")]
+limit_left = 0
+limit_top = 0
+limit_right = 850
+limit_bottom = 360
+position_smoothing_enabled = true
+script = ExtResource("6_qfnet")
+ball = NodePath("../ActorsContainer/Ball")
