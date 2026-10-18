@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://c1ixbhxgm4de4"]
+[gd_scene load_steps=12 format=3 uid="uid://c1ixbhxgm4de4"]
 
 [ext_resource type="Texture2D" uid="uid://crm0y2kgjhbus" path="res://assets/art/characters/soccer-player.png" id="1_xwt18"]
 [ext_resource type="Script" uid="uid://cx763lvf8d6rd" path="res://scenes/Characters/player.gd" id="1_y7cse"]
@@ -90,10 +90,61 @@ tracks/0/keys = {
 "values": [30]
 }
 
+[sub_resource type="Animation" id="Animation_8u6hb"]
+resource_name = "prep_kick"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [48]
+}
+
+[sub_resource type="Animation" id="Animation_jbyc3"]
+resource_name = "kick"
+length = 0.15
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [49, 50, 51, 51]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.15),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_animation_complete"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7xbc7"]
 _data = {
 &"Idle": SubResource("Animation_y7cse"),
 &"RESET": SubResource("Animation_8iw34"),
+&"kick": SubResource("Animation_jbyc3"),
+&"prep_kick": SubResource("Animation_8u6hb"),
 &"recover": SubResource("Animation_5vcpl"),
 &"run": SubResource("Animation_7xbc7"),
 &"tackle": SubResource("Animation_ipnkg")

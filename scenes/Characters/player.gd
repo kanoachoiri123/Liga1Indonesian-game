@@ -2,10 +2,12 @@ class_name Player
 extends CharacterBody2D
 
 enum ControlScheme {CPU, P1, P2}
-enum State {MOVING, TACKLING, RECOVERING}
+enum State {MOVING, TACKLING, RECOVERING, PREPPING_SHOT, SHOOTING}
 
 @export var control_scheme : ControlScheme
 @export var speed: float
+@export var power: float = 70
+@export var ball : Ball
 
 @onready var animation_player : AnimationPlayer = %AnimationPlayer
 @onready var player_sprite : Sprite2D = %PlayerSprite
@@ -23,11 +25,11 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide()
 
 
-func switch_state(new_state: State) -> void:
+func switch_state(new_state: State, state_data: PlayerStateData = PlayerStateData.new()) -> void:
 	if current_state != null:
 		current_state.queue_free()
 	current_state = state_factory.get_fresh_state(new_state)
-	current_state.setup(self, animation_player)
+	current_state.setup(self, state_data, animation_player, ball)
 	current_state.state_transition_requested.connect(switch_state.bind())
 	current_state.name = "PlayerStateMachine:" + str(new_state)
 	call_deferred("add_child", current_state)
@@ -50,3 +52,10 @@ func flip_heading() -> void:
 		player_sprite.flip_h = false
 	elif heading == Vector2.LEFT:
 		player_sprite.flip_h = true
+		
+func has_ball() -> bool:
+	return ball.carrier == self
+	
+func on_animation_complete() -> void:
+	if current_state != null:
+		current_state.on_animation_complete()

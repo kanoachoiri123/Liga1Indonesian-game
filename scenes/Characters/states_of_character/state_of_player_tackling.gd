@@ -18,4 +18,4 @@ func _physics_process(delta: float) -> void:
 			is_stopped = true
 			time_finish_tackle = Time.get_ticks_msec()
 	elif Time.get_ticks_msec() - time_finish_tackle > DURATION_PRE_RECOVERY:
-		state_transition_requested.emit(Player.State.RECOVERING)
+		transition_state(Player.State.RECOVERING)
