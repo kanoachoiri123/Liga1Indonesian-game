@@ -17,7 +17,7 @@ func on_animation_complete() -> void:
 
 func find_teammate_in_view() -> Player:
 	var players_in_view := teammate_detection_area.get_overlapping_bodies()
-	var teammates_in_view := players_in_view.filter(func(p: Player): return p != player)
+	var teammates_in_view := players_in_view.filter(func(p: Player): return p != player and p.is_home_team == player.is_home_team)
 	teammates_in_view.sort_custom(func(p1: Player, p2: Player):
 		return p1.position.distance_squared_to(player.position) < p2.position.distance_squared_to(player.position)
 	)

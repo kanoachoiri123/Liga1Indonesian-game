@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://drehg5tpqhqnf" path="res://assets/art/backgrounds/pitch-pattern.png" id="2_k0juu"]
 [ext_resource type="Texture2D" uid="uid://cpf7paehym3y3" path="res://assets/art/backgrounds/pitch-lines.png" id="3_71j4m"]
 [ext_resource type="PackedScene" uid="uid://7swnrvbdn6yn" path="res://scenes/goal/goal.tscn" id="4_i7141"]
-[ext_resource type="PackedScene" uid="uid://c1ixbhxgm4de4" path="res://scenes/Characters/player.tscn" id="4_k0juu"]
+[ext_resource type="Script" uid="uid://b8i7dt2bfa7hk" path="res://scenes/actors_container.gd" id="4_w7kh3"]
 [ext_resource type="Texture2D" uid="uid://ct25rvm5s6fxg" path="res://assets/art/backgrounds/top-wall.png" id="5_4mrxx"]
 [ext_resource type="PackedScene" uid="uid://bap12k0s13vwy" path="res://scenes/football/football.tscn" id="5_71j4m"]
 [ext_resource type="Texture2D" uid="uid://sw3fgxabt82h" path="res://assets/art/backgrounds/bottom-wall.png" id="6_7r4gi"]
@@ -37,6 +37,7 @@ centered = false
 
 [node name="ActorsContainer" type="Node2D" parent="."]
 y_sort_enabled = true
+script = ExtResource("4_w7kh3")
 
 [node name="PitchObjects" type="Node2D" parent="ActorsContainer"]
 y_sort_enabled = true
@@ -103,22 +104,30 @@ position = Vector2(0, 0.0906258)
 scale = Vector2(1, 1.00223)
 polygon = PackedVector2Array(17, -7, 24, -7, 9, 105, 3, 105)
 
-[node name="Player" parent="ActorsContainer" node_paths=PackedStringArray("ball") instance=ExtResource("4_k0juu")]
-position = Vector2(139, 89)
-ball = NodePath("../Ball")
-
-[node name="Player2" parent="ActorsContainer" node_paths=PackedStringArray("ball") instance=ExtResource("4_k0juu")]
-position = Vector2(123, 162)
-control_scheme = 0
-ball = NodePath("../Ball")
-
-[node name="Player3" parent="ActorsContainer" node_paths=PackedStringArray("ball") instance=ExtResource("4_k0juu")]
-position = Vector2(209, 135)
-control_scheme = 0
-ball = NodePath("../Ball")
-
 [node name="Ball" parent="ActorsContainer" instance=ExtResource("5_71j4m")]
-position = Vector2(159, 132)
+position = Vector2(425, 180)
+
+[node name="Spawns" type="Node2D" parent="ActorsContainer"]
+unique_name_in_owner = true
+position = Vector2(425, 180)
+
+[node name="Goalie" type="Node2D" parent="ActorsContainer/Spawns"]
+position = Vector2(-345, 0)
+
+[node name="DefenseTop" type="Node2D" parent="ActorsContainer/Spawns"]
+position = Vector2(-235, -30)
+
+[node name="DefenseBottom" type="Node2D" parent="ActorsContainer/Spawns"]
+position = Vector2(-235, 30)
+
+[node name="Midfield" type="Node2D" parent="ActorsContainer/Spawns"]
+position = Vector2(-125, 0)
+
+[node name="OffenseTop" type="Node2D" parent="ActorsContainer/Spawns"]
+position = Vector2(-25, -80)
+
+[node name="OffenseBottom" type="Node2D" parent="ActorsContainer/Spawns"]
+position = Vector2(25, 80)
 
 [node name="Camera" type="Camera2D" parent="." node_paths=PackedStringArray("ball")]
 limit_left = 0

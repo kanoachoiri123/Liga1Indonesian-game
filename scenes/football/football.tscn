@@ -15,7 +15,7 @@ sync_to_physics = false
 script = ExtResource("1_x15rp")
 
 [node name="BallSprite" type="Sprite2D" parent="."]
-position = Vector2(0, -5)
+position = Vector2(-3, -4)
 scale = Vector2(0.0124306, 0.0130694)
 texture = ExtResource("1_ylh0r")
 

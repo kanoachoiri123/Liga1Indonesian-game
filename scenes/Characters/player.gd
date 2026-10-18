@@ -3,6 +3,8 @@ extends CharacterBody2D
 
 enum ControlScheme {CPU, P1, P2}
 enum State {MOVING, TACKLING, RECOVERING, PREPPING_SHOT, SHOOTING, PASSING}
+enum Role {GOALIE, DEFENSE, MIDFIELD, OFFENSE}
+enum SkinColor {LIGHT, MEDIUM, DARK}
 
 const CONTROL_SCHEME_MAP := {
 	ControlScheme.CPU: preload("res://assets/art/props/cpu.png"),
@@ -23,6 +25,10 @@ const CONTROL_SCHEME_MAP := {
 var current_state: StateOfPlayer = null
 var heading := Vector2.RIGHT
 var state_factory := PlayerStateFactory.new()
+var full_name := ""
+var role := Role.MIDFIELD
+var skin_color := SkinColor.MEDIUM
+var is_home_team := true
 
 func _ready() -> void:
 	switch_state(State.MOVING)
@@ -32,6 +38,19 @@ func _physics_process(_delta: float) -> void:
 	flip_heading()
 	update_control_indicator()
 	move_and_slide()
+
+
+func initialize(context_position: Vector2, context_ball: Ball, context_data: PlayerResource, context_is_home: bool) -> void:
+	control_scheme = ControlScheme.CPU
+	position = context_position
+	ball = context_ball
+	speed = context_data.speed
+	power = context_data.power
+	role = context_data.role
+	skin_color = context_data.skin_color
+	full_name = context_data.full_name
+	is_home_team = context_is_home
+	heading = Vector2.RIGHT if context_is_home else Vector2.LEFT
 
 
 func switch_state(new_state: State, state_data: PlayerStateData = PlayerStateData.new()) -> void:
@@ -67,7 +86,7 @@ func flip_heading() -> void:
 		player_sprite.flip_h = true
 
 func has_ball() -> bool:
-	return ball.carrier == self
+	return ball != null and ball.carrier == self
 
 func on_animation_complete() -> void:
 	if current_state != null:

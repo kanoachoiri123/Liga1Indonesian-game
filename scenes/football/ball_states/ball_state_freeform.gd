@@ -9,6 +9,8 @@ func _process(delta: float) -> void:
 	move_and_bounce(delta)
 
 func on_player_enter(body: Player) -> void:
+	if not body.is_home_team:
+		return
 	var giver := ball.previous_carrier
 	if body.control_scheme == Player.ControlScheme.CPU and giver != null and giver != body and giver.control_scheme != Player.ControlScheme.CPU:
 		body.control_scheme = giver.control_scheme

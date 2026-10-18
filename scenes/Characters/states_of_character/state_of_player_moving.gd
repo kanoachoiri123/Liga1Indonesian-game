@@ -3,7 +3,7 @@ extends StateOfPlayer
 
 func _process(_delta: float) -> void:
 	if player.control_scheme == Player.ControlScheme.CPU:
-			player.velocity = Vector2.ZERO
+		player.velocity = Vector2.ZERO
 	else:
 		handle_human_movement()
 	player.set_movement_animation()
