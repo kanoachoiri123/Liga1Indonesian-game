@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dtkgwk2n5qt2j"]
+[gd_scene load_steps=6 format=3 uid="uid://dtkgwk2n5qt2j"]
 
 [ext_resource type="Texture2D" uid="uid://0s7kth3tihkf" path="res://assets/art/backgrounds/pitch-background.png" id="1_4wyf3"]
 [ext_resource type="Texture2D" uid="uid://drehg5tpqhqnf" path="res://assets/art/backgrounds/pitch-pattern.png" id="2_k0juu"]
 [ext_resource type="Texture2D" uid="uid://cpf7paehym3y3" path="res://assets/art/backgrounds/pitch-lines.png" id="3_71j4m"]
 [ext_resource type="PackedScene" uid="uid://c1ixbhxgm4de4" path="res://scenes/Characters/player.tscn" id="4_k0juu"]
+[ext_resource type="PackedScene" uid="uid://bap12k0s13vwy" path="res://scenes/football/football.tscn" id="5_71j4m"]
 
 [node name="World" type="Node2D"]
 
@@ -26,13 +27,19 @@ modulate = Color(0.941176, 0.941176, 0.941176, 1)
 texture = ExtResource("3_71j4m")
 centered = false
 
-[node name="Player" parent="." instance=ExtResource("4_k0juu")]
+[node name="ActorsContainer" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Player" parent="ActorsContainer" instance=ExtResource("4_k0juu")]
 position = Vector2(139, 89)
 control_scheme = 0
 
-[node name="Player2" parent="." instance=ExtResource("4_k0juu")]
+[node name="Player2" parent="ActorsContainer" instance=ExtResource("4_k0juu")]
 position = Vector2(123, 162)
 
-[node name="Player3" parent="." instance=ExtResource("4_k0juu")]
+[node name="Player3" parent="ActorsContainer" instance=ExtResource("4_k0juu")]
 position = Vector2(209, 135)
 control_scheme = 2
+
+[node name="Ball" parent="ActorsContainer" instance=ExtResource("5_71j4m")]
+position = Vector2(159, 132)
