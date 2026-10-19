@@ -21,3 +21,7 @@ func transition_state(new_state: Player.State, data: PlayerStateData = PlayerSta
 
 func on_animation_complete() -> void:
 	pass
+
+# Only the moving state says yes
+func can_carry_ball() -> bool:
+	return false

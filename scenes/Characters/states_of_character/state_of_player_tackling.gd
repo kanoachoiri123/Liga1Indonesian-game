@@ -10,6 +10,11 @@ var is_stopped := false
 func _enter_tree() -> void:
 	animation_player.play("tackle")
 	is_stopped = false
+	player.tackle_damage_emitter_area.set_deferred("monitoring", true)
+
+func _exit_tree() -> void:
+	if is_instance_valid(player):
+		player.tackle_damage_emitter_area.set_deferred("monitoring", false)
 
 func _physics_process(delta: float) -> void:
 	if not is_stopped:

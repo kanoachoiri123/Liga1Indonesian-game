@@ -4,7 +4,7 @@ extends AnimatableBody2D
 enum State {CARRIED, FREEFORM, SHOT}
 
 @export var friction_ground := 100.0
-@export var bounciness := 1.0
+@export var bounciness := 0.8
 
 @onready var player_detection_area : Area2D = %PlayerDetectionArea
 
@@ -13,9 +13,26 @@ var previous_carrier : Player = null
 var current_state: BallState = null
 var state_factory := BallStateFactory.new()
 var velocity := Vector2.ZERO
+var scoring_raycast: RayCast2D = null
 
 func _ready() -> void:
+	# Also bounce off the goalkeeper's hands (layer 6)
+	set_collision_mask_value(6, true)
+	create_scoring_raycast()
 	switch_state(State.FREEFORM)
+
+func _process(_delta: float) -> void:
+	scoring_raycast.rotation = velocity.angle()
+
+func create_scoring_raycast() -> void:
+	scoring_raycast = RayCast2D.new()
+	scoring_raycast.name = "ScoringRaycast"
+	scoring_raycast.target_position = Vector2(80, 0)
+	scoring_raycast.position = Vector2(0, -5)
+	scoring_raycast.collision_mask = 16
+	scoring_raycast.collide_with_areas = true
+	scoring_raycast.collide_with_bodies = false
+	add_child(scoring_raycast)
 
 func switch_state(new_state: State) -> void:
 	if current_state != null:
@@ -40,6 +57,20 @@ func pass_to(destination: Vector2) -> void:
 	previous_carrier = carrier
 	carrier = null
 	switch_state(State.FREEFORM)
-	
+
+func tumble(tumble_velocity: Vector2) -> void:
+	velocity = tumble_velocity
+	previous_carrier = carrier
+	carrier = null
+	switch_state(State.FREEFORM)
+
 func stop() -> void:
 	velocity = Vector2.ZERO
+
+# True if the ball is moving and its ray hits the given scoring area
+func is_headed_for_scoring_area(scoring_area: Area2D) -> bool:
+	if scoring_area == null or velocity.length() < 10.0:
+		return false
+	if not scoring_raycast.is_colliding():
+		return false
+	return scoring_raycast.get_collider() == scoring_area

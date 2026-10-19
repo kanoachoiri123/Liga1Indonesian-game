@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://c1ixbhxgm4de4"]
+[gd_scene load_steps=20 format=3 uid="uid://c1ixbhxgm4de4"]
 
 [ext_resource type="Texture2D" uid="uid://crm0y2kgjhbus" path="res://assets/art/characters/soccer-player.png" id="1_xwt18"]
 [ext_resource type="Script" uid="uid://cx763lvf8d6rd" path="res://scenes/Characters/player.gd" id="1_y7cse"]
@@ -151,10 +151,64 @@ tracks/0/keys = {
 "values": [30]
 }
 
+[sub_resource type="Animation" id="Animation_np5j3"]
+resource_name = "hurt"
+length = 0.2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [54, 55]
+}
+
+[sub_resource type="Animation" id="Animation_myi3t"]
+resource_name = "dive_down"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [72]
+}
+
+[sub_resource type="Animation" id="Animation_vvg2b"]
+resource_name = "dive_up"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [66]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7xbc7"]
 _data = {
 &"Idle": SubResource("Animation_y7cse"),
 &"RESET": SubResource("Animation_8iw34"),
+&"dive_down": SubResource("Animation_myi3t"),
+&"dive_up": SubResource("Animation_vvg2b"),
+&"hurt": SubResource("Animation_np5j3"),
 &"kick": SubResource("Animation_jbyc3"),
 &"prep_kick": SubResource("Animation_8u6hb"),
 &"recover": SubResource("Animation_5vcpl"),
