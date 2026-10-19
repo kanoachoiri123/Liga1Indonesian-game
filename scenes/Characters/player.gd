@@ -12,6 +12,22 @@ const CONTROL_SCHEME_MAP := {
 	ControlScheme.P2: preload("res://assets/art/props/2p.png"),
 }
 
+# Number of pixel rows in the team palette image, including the top reference row
+const PALETTE_ROW_COUNT := 6
+
+# Same order as squads.json
+const CLUBS := [
+	"PERSIB BANDUNG",
+	"DEWA UNITED",
+	"BHAYANGKARA",
+	"JAVA UNITED",
+	"BALI UNITED",
+	"AREMA",
+	"PERSIJA JAKARTA",
+	"MADURA UNITED",
+	"BORNEO SAMARINDA",
+]
+
 @export var control_scheme : ControlScheme
 @export var speed: float
 @export var power: float = 70
@@ -29,8 +45,10 @@ var full_name := ""
 var role := Role.MIDFIELD
 var skin_color := SkinColor.MEDIUM
 var is_home_team := true
+var country := ""
 
 func _ready() -> void:
+	set_shader_properties()
 	switch_state(State.MOVING)
 
 func _physics_process(_delta: float) -> void:
@@ -40,7 +58,7 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide()
 
 
-func initialize(context_position: Vector2, context_ball: Ball, context_data: PlayerResource, context_is_home: bool) -> void:
+func initialize(context_position: Vector2, context_ball: Ball, context_data: PlayerResource, context_is_home: bool, context_country: String) -> void:
 	control_scheme = ControlScheme.CPU
 	position = context_position
 	ball = context_ball
@@ -50,7 +68,21 @@ func initialize(context_position: Vector2, context_ball: Ball, context_data: Pla
 	skin_color = context_data.skin_color
 	full_name = context_data.full_name
 	is_home_team = context_is_home
+	country = context_country
 	heading = Vector2.RIGHT if context_is_home else Vector2.LEFT
+
+
+func set_shader_properties() -> void:
+	var material := player_sprite.material as ShaderMaterial
+	if material == null:
+		return
+	var club_index := CLUBS.find(country)
+	if club_index < 0:
+		club_index = 0
+	# Rows 1 to PALETTE_ROW_COUNT - 1 are team colours. Row 0 is the reference row.
+	var row := 1 + (club_index % (PALETTE_ROW_COUNT - 1))
+	material.set_shader_parameter("team_color", row)
+	material.set_shader_parameter("skin_color", int(skin_color))
 
 
 func switch_state(new_state: State, state_data: PlayerStateData = PlayerStateData.new()) -> void:

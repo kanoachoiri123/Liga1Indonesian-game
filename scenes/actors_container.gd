@@ -33,5 +33,5 @@ func spawn_team(country: String, is_home: bool) -> void:
 	for i in squad.size():
 		var spawn_point: Node2D = spawns.get_child(i)
 		var player: Player = PLAYER_PREFAB.instantiate()
-		player.initialize(spawn_point.global_position, ball, squad[i], is_home)
+		player.initialize(spawn_point.global_position, ball, squad[i], is_home, country)
 		add_child(player)
