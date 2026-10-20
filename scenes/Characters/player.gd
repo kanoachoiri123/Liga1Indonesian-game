@@ -1,6 +1,8 @@
 class_name Player
 extends CharacterBody2D
 
+signal swap_requested(requester: Player)
+
 enum ControlScheme {CPU, P1, P2}
 enum State {MOVING, TACKLING, RECOVERING, PREPPING_SHOT, SHOOTING, PASSING, HURT, DIVING}
 enum Role {GOALIE, DEFENSE, MIDFIELD, OFFENSE}
@@ -161,7 +163,7 @@ func create_goalie_parts() -> void:
 
 func setup_ai_behavior() -> void:
 	ai_behavior = ai_behavior_factory.get_ai_behavior(role)
-	ai_behavior.setup(self, ball, opponent_detection_area)
+	ai_behavior.setup(self, ball, opponent_detection_area, teammate_detection_area)
 	ai_behavior.name = "AIBehavior"
 	add_child(ai_behavior)
 
@@ -173,6 +175,15 @@ func on_tackle_player(body: Node2D) -> void:
 
 func get_hurt(hurt_origin: Vector2) -> void:
 	switch_state(State.HURT, PlayerStateData.build().set_hurt_direction(hurt_origin))
+
+
+# NEW: a human teammate asks me (the ball carrier) to pass to them
+func get_pass_request(requester: Player) -> void:
+	if ball.carrier != self:
+		return
+	if current_state == null or not current_state.can_pass():
+		return
+	switch_state(State.PASSING, PlayerStateData.build().set_pass_target(requester))
 
 
 func is_facing_target_goal() -> bool:

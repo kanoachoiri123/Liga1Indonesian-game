@@ -25,3 +25,7 @@ func on_animation_complete() -> void:
 # Only the moving state says yes
 func can_carry_ball() -> bool:
 	return false
+
+# NEW: states where a teammate can ask me to pass. Moving and prepping a shot say yes
+func can_pass() -> bool:
+	return false

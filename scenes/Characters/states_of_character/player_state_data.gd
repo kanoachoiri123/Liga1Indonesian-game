@@ -3,6 +3,7 @@ class_name PlayerStateData
 var shot_direction := Vector2.ZERO
 var shot_power := 0.0
 var hurt_direction := Vector2.ZERO
+var pass_target: Player = null
 
 static func build() -> PlayerStateData:
 	return PlayerStateData.new()
@@ -17,4 +18,8 @@ func set_shot_power(power: float) -> PlayerStateData:
 
 func set_hurt_direction(direction: Vector2) -> PlayerStateData:
 	hurt_direction = direction
+	return self
+
+func set_pass_target(target: Player) -> PlayerStateData:
+	pass_target = target
 	return self

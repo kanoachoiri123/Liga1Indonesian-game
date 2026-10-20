@@ -1,15 +1,18 @@
 class_name Goal
 extends Node2D
 
+signal goal_scored(conceding_home: bool)
+
 # Aim points in the goal's local space (top, centre, bottom)
 const TARGET_OFFSETS := [Vector2(22, -56), Vector2(22, -35), Vector2(22, -10)]
 
 @onready var back_net_area: Area2D = %BackNetArea
 
 var scoring_area: Area2D = null
+var owner_is_home := true     # set by ActorsContainer: true = this is the home team's goal
 
 func _ready() -> void:
-	back_net_area.body_entered.connect(on_ball_enter_back_net.bind())
+	back_net_area.body_entered.connect(on_ball_entered)
 	create_invisible_wall()
 	create_scoring_area()
 
@@ -29,12 +32,12 @@ func create_invisible_wall() -> void:
 	add_child(wall)
 
 
-# On collision layer 5. The ball's raycast looks for this to know if a shot is going in
+# Layer 5 so the ball's raycast sees it. Mask 4 so it also detects the ball (ball is on layer 3)
 func create_scoring_area() -> void:
 	scoring_area = Area2D.new()
 	scoring_area.name = "ScoringArea"
 	scoring_area.collision_layer = 16
-	scoring_area.collision_mask = 0
+	scoring_area.collision_mask = 4
 	var shape := CollisionShape2D.new()
 	var rectangle := RectangleShape2D.new()
 	rectangle.size = Vector2(6, 60)
@@ -42,10 +45,18 @@ func create_scoring_area() -> void:
 	shape.position = Vector2(0, -35)
 	scoring_area.add_child(shape)
 	add_child(scoring_area)
+	scoring_area.body_entered.connect(on_ball_entered)
 
 
-func on_ball_enter_back_net(ball: Ball) -> void:
-	ball.stop()
+func on_ball_entered(body: Node2D) -> void:
+	if not body is Ball:
+		return
+	# A ball being dribbled does not count as a goal
+	if body.carrier != null:
+		return
+	body.stop()
+	goal_scored.emit(owner_is_home)
+
 
 func get_scoring_area() -> Area2D:
 	return scoring_area

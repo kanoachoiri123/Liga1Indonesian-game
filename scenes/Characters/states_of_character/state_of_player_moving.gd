@@ -16,14 +16,30 @@ func handle_human_movement() -> void:
 	var direction := KeyUtils.get_input_vector(player.control_scheme)
 	player.velocity = direction * player.speed
 
-	if player.has_ball():
-		if KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.PASS):
+	if KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.PASS):
+		if player.has_ball():
 			transition_state(Player.State.PASSING)
-		elif KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.SHOOT):
+		elif can_teammate_pass_ball():
+			# Ask the CPU teammate holding the ball to pass to me
+			ball.carrier.get_pass_request(player)
+		else:
+			# Take over the CPU teammate closest to the ball
+			player.swap_requested.emit(player)
+	elif KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.SHOOT):
+		if player.has_ball():
 			transition_state(Player.State.PREPPING_SHOT)
-	elif KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.SHOOT) and player.velocity != Vector2.ZERO:
-		transition_state(Player.State.TACKLING)
+		elif player.velocity != Vector2.ZERO:
+			transition_state(Player.State.TACKLING)
+
+
+# A teammate holds the ball and is controlled by the CPU
+func can_teammate_pass_ball() -> bool:
+	return ball.carrier != null and ball.carrier.is_home_team == player.is_home_team and ball.carrier.control_scheme == Player.ControlScheme.CPU
 
 
 func can_carry_ball() -> bool:
 	return player.role != Player.Role.GOALIE
+
+
+func can_pass() -> bool:
+	return true

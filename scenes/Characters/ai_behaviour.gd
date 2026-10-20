@@ -6,12 +6,14 @@ const DURATION_AI_TICK_FREQUENCY := 200
 var player: Player = null
 var ball: Ball = null
 var opponent_detection_area: Area2D = null
+var teammate_detection_area: Area2D = null
 var time_since_last_ai_tick := Time.get_ticks_msec()
 
-func setup(context_player: Player, context_ball: Ball, context_opponent_detection_area: Area2D) -> void:
+func setup(context_player: Player, context_ball: Ball, context_opponent_detection_area: Area2D, context_teammate_detection_area: Area2D) -> void:
 	player = context_player
 	ball = context_ball
 	opponent_detection_area = context_opponent_detection_area
+	teammate_detection_area = context_teammate_detection_area
 	# Random start so the CPU players don't all think on the same frame
 	time_since_last_ai_tick = Time.get_ticks_msec() + randi_range(0, DURATION_AI_TICK_FREQUENCY)
 
@@ -55,6 +57,13 @@ func is_ball_possessed_by_opponent() -> bool:
 func has_opponents_nearby() -> bool:
 	for body in opponent_detection_area.get_overlapping_bodies():
 		if body is Player and body.is_home_team != player.is_home_team:
+			return true
+	return false
+
+
+func has_teammate_in_view() -> bool:
+	for body in teammate_detection_area.get_overlapping_bodies():
+		if body is Player and body != player and body.is_home_team == player.is_home_team:
 			return true
 	return false
 

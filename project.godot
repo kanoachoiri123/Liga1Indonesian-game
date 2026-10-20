@@ -11,14 +11,17 @@ config_version=5
 [application]
 
 config/name="Liga1Indonesia"
-run/main_scene="uid://dtkgwk2n5qt2j"
+run/main_scene="uid://ftr77kmq0w3v"
 config/features=PackedStringArray("4.4", "GL Compatibility")
+run/flush_stdout_on_print=true
 config/icon="res://icon.svg"
 
 [autoload]
 
 KeyUtils="*res://script_utils/key_utils.gd"
 DataLoader="*res://script_utils/data_loader.gd"
+MusicPlayer="*res://scenes/music_player.gd"
+Tournament="*res://scenes/tournament.gd"
 
 [debug]
 
